@@ -3,7 +3,23 @@ Masao to Canvas extension for Google Chrome
 
 スーパー正男のJava版を自動的にCanvas版へ変換するGoogle Chromeの拡張機能です。　
 
-2.8、FX、Kani、Kani2、FX拡張（一部）に対応しています。
+mc_c.zipは全て2.8へ、FX版は使用classとJS拡張の有無によって処理を分けています。
+
+|使用クラス(FX版)|処理|
+|---|---|
+|MasaoConstruction.class|通常のreplaceを行います|
+|Masaokani2.class|Kani2.jsを読み込みreplaceを行います。|
+|Masaokani.class|旧ParamをKani2用に変換した後、kani2と同じ処理を行います。|
+|MasaoJSS.class|ページそのものをコピーし、変換用にソースを書き換え新規ウィンドウ・タブで開きます。|
+|MasaoXJSS2.class|MasaoJSSと同じ処理を行います。|
+|MasaoConstruction.class(非同期JS有り)|MasaoJSSとほぼ同じ処理を行います。onLoadJSが使われているかが判別トリガーです。|
+|MasaoFXApplet.class|MasaoJSSと同じ処理を行います。おまじない程度ですが。|
+
+Javascript拡張正男の変換において、他の画像ファイルを読み込むプログラムがあった場合、読み込めないというバグがあります。
+
+全ての正男の動作を保証できるものではありません。
+
+
 
 ## License for MTC
 MIT, but licenses of used libraries and formats are depending on their original license.
@@ -24,7 +40,7 @@ WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 --
 
-Jss.js(Javascript拡張変換用プログラム) by くるりん
+Jss.js、caps.js(Javascript拡張変換用プログラム) by くるりん
 
 JSまさおライブラリ by Ryo
 
