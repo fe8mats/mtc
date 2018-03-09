@@ -1,10 +1,10 @@
 /*
 Masao to Canvas for chrome extension
-v1.0
+v1.2
 Developed by Tex - Tetsuya 2018
 http://tex1.symphonic-net.com/
 
-License : CC BY 4.0
+Licensed by MIT
 
 mss.js by くるりん
 http://sy.yryr.me/club/
@@ -16,25 +16,50 @@ var mtc = (function() {
 
   //アプレットタグが存在するか
   var applet = document.getElementsByTagName('applet')[0];
+  var object = document.getElementsByTagName('object')[0];
   var sc = document.getElementsByTagName('script');
-  if (applet != null) {
-    var flag = 1;
-    //スクリプトタグを取得
-    for (var i = 0; i < sc.length; i++) {
-      var cvs_c = sc[i].getAttribute("src");
-      //ScriptタグにCanvasMasaoが含まれるかチェック
-      if (cvs_c != null) {
-        if (~cvs_c.indexOf('CanvasMasao')) {
-          console.log("Already converted");
-          flag = 0;
-        }
-      }
 
+  if (applet != null) {
+    var ap_code = applet.getAttribute("code");
+    var flag = 1;
+    if (~ap_code.indexOf('Masao')) {
+      //スクリプトタグを取得
+      for (var i = 0; i < sc.length; i++) {
+        var cvs_c = sc[i].getAttribute("src");
+        //ScriptタグにCanvasMasaoが含まれるかチェック
+        if (cvs_c != null) {
+          if (~cvs_c.indexOf('CanvasMasao')) {
+            console.log("Already converted");
+            flag = 0;
+          }
+        }
+
+      }
+      //変換
+      if (flag == 1) {
+        port(applet.getAttribute("archive"), ap_code);
+      }
     }
-    //変換
-    if (flag == 1) {
-      port();
+  } else if (object != null) {
+    var param = document.getElementsByTagName('param');
+    var classid = "";
+    var archive = "";
+    console.log("param", param);
+    for (var i = 0; i < 5; i++) {
+      var prm_name = param[i].getAttribute("name");
+      console.log("name", prm_name);
+      if (prm_name == "classid") {
+        classid = param[i].getAttribute("value");
+      } else if (prm_name == "archive") {
+        archive = param[i].getAttribute("value");
+      }
     }
+    console.log("class:", classid);
+    console.log("archive:", archive);
+    object.innerHTML = "<center><applet code=\"" + classid.replace("java:", "") +"\" width=\"512\" height=\"320\" archive=\"" + archive + "\">" + object.innerHTML + "</applet></center>";
+
+    port(archive, classid.replace("java:", ""));
+
   }
 
   function jsConvert() {
@@ -51,7 +76,7 @@ var mtc = (function() {
         <head><script type=\"text/javascript\" charset=\"UTF-8\">\n\
         (function () {\n\
           \"use strict\";\n\
-    \n\
+\n\
           var getElm = document.getElementById; // 元のメソッドを退避\n\
           var Applet1 = null; // 後でApplet1 が入る\n\
     \n\
@@ -79,7 +104,7 @@ var mtc = (function() {
         }());\n\
     </script>";
       var new_html = html.replace("<head>", new_code2);
-
+      console.log(new_html);
       var win = window.open();
       win.document.open();
       win.document.write(new_html);
@@ -152,16 +177,16 @@ var mtc = (function() {
 
   }
 
-  function port() {
+  function port(archive, code) {
 
-    var mc_c = applet.getAttribute("archive");
-    var code = applet.getAttribute("code");
+    var mc_c = archive;
     console.log("mc_c", mc_c);
+    mc_c = mc_c.slice(-4);
     console.log("code", code);
     var body = document.getElementsByTagName('body')[0].innerHTML;
 
     //正男のアプレットがあるか判定
-    if (mc_c == "mc_c.zip") {
+    if (mc_c == ".zip") {
 
       console.log("Masao was found.");
       //正男のプログラムを取得
@@ -172,7 +197,7 @@ var mtc = (function() {
 
 
 
-    } else if (mc_c == "mc_c.jar") {
+    } else if (mc_c == ".jar") {
 
       console.log("Masao was found.");
       switch (code) {
