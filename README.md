@@ -5,6 +5,8 @@ Masao to Canvas extension for Google Chrome
 
 mc_c.zipは全て2.8へ、FX版は使用classとJS拡張の有無によって処理を分けています。
 
+v1.2よりオブジェクトタグによる正男アプレットの変更に対応いたしました。現在β実装です。
+
 |使用クラス(FX版)|処理|
 |---|---|
 |MasaoConstruction.class|通常のreplaceを行います|
