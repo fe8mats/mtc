@@ -1,4 +1,4 @@
-# Masao to Canvas
+# MTC (Masao to Canvas)
 Masao to Canvas extension for Google Chrome
 
 スーパー正男のJava版を自動的にCanvas版へ変換するGoogle Chromeの拡張機能です。　
